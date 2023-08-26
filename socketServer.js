@@ -25,15 +25,15 @@
          });
       }
    })
-   socket.on('unlikePost',({auth,post})=>{
+   socket.on('unlikePost',(newPost)=>{
      console.log('unlike')
-    const ids=[...post.user.followers,post.user._id]
+    const ids=[...newPost.user.followers,newPost.user._id]
     console.log({ids})
     const client=users.filter((user)=>ids.includes(user.id))
     console.log({client})
      if(client.length>0){
         client.forEach(element => {
-          io.to(element.socketId).emit('unlikeToClient',{post,user:auth.user})
+          io.to(element.socketId).emit('unlikeToClient',newPost)
         });
      }
   })

@@ -115,7 +115,7 @@ export const unLikePost = ({post, auth,socket}) => async (dispatch) => {
     const newPost = {...post, likes: post.likes.filter(like => like._id !== auth.user._id)}
     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost})
 
- 
+    socket.emit('unlikePost',newPost)
 
     try {
         await putDataAPI(`post/${post._id}/unlike`, null, auth.token)

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { GLOBALTYPES } from '../../../redux/GlobalTypes'
 import { deletePost } from '../../../redux/actions/postAction'
 import { useNavigate } from 'react-router-dom'
-import { BASEURL } from '../../../utils/config'
+
 const CardHeader = ({post}) => {
     const {auth,socket} = useSelector(state => state)
     const dispatch=useDispatch()
@@ -23,7 +23,7 @@ const CardHeader = ({post}) => {
         
     }
    const handleCopyLink=()=>{
-    navigator.clipboard.writeText(`${BASEURL}/post/${post._id}`)
+    navigator.clipboard.writeText(`${process.env.REACT_APP_FRONTEND_URL}/post/${post._id}`)
    }
   return (
     <div className="card_header">

@@ -1,5 +1,5 @@
 import axios from 'axios'
-   const API=axios.create({baseURL:'http://localhost:5000',withCredentials:true})
+   const API=axios.create({baseURL:process.env.REACT_APP_BASE_URL,withCredentials:true})
    
 export const getDataAPI=async(url,token)=>{
    const res=await API.get(`/api/${url}`,{

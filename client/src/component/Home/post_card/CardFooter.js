@@ -47,8 +47,8 @@ const CardFooter = ({post}) => {
         setIsLike(false)
         setLoadLike(true)
         await dispatch(unLikePost({post,auth,socket}))
-        console.log('unlike')
-        socket.emit('unlikePost',{post,auth})
+    
+      
         setLoadLike(false)
     }
     const handleSavePost = async () => {

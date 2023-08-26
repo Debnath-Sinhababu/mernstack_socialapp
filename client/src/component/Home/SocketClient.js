@@ -20,10 +20,10 @@ const SocketClient = () => {
       return () => socket.off('likeToClient')
     },[HomePost,auth,socket,dispatch])
     useEffect(()=>{
-      socket.on('unlikeToClient',({post,user})=>{
-        console.log(post)
-        const newPost = {...post, likes: post.likes.filter((u)=>u._id!==user._id)}
+      socket.on('unlikeToClient',(newPost)=>{
         console.log(newPost)
+     
+
         dispatch({type: POST_TYPES.UPDATE_POST, payload: newPost})
       })
       return () => socket.off('unlikeToClient')
