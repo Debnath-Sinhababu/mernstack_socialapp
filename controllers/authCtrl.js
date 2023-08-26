@@ -50,8 +50,9 @@ const authCtrl={
             const access_token = createAccessToken(user)
             const refresh_token = createRefreshToken(user)
             res.cookie('refreshtoken', refresh_token, {
-                httpOnly: true,
+                sameSite: 'none', 
                 secure: true,
+                httpOnly: false,
                 maxAge: 30*24*60*60*1000 // 30days
             })
 
@@ -69,7 +70,15 @@ const authCtrl={
    },
    logout: async (req,res)=>{
     try {
-        res.clearCookie('refreshtoken')
+        res.cookie('refreshtoken','',{
+            expires: new Date(
+                Date.now()
+              ),
+              secure:true,
+              httpOnly:false,
+              sameSite: 'none',
+             
+         })
         return res.json({msg: "Logged out!"})
     } catch (err) {
         return res.status(500).json({msg: err.message})
