@@ -106,8 +106,8 @@ const postCtrl = {
   },
   updatePost:async (req, res) => {
     try {
-      const { content, images,videos } = req.body;
-   
+      const { content, images,videos,status } = req.body;
+        
       if (images.length === 0 && videos.length==0)
         return res.status(400).json({ msg: "Please add atleast one image or video." });
         const newimages=images.filter((image)=>!image.url)
@@ -115,7 +115,20 @@ const postCtrl = {
         const newvideos=videos.filter((video)=>!video.url)
         const oldvideos=videos.filter((video)=>video.url)
       const uploadimage = [...oldimages,...oldvideos];
-    
+      const imagelength=Number(images.length)
+      const videolength=Number(videos.length)
+      const total=imagelength+videolength
+        if(newimages.length==0 && newvideos.length==0 && status.images.length==total && status.content==content){
+          const post=await postModel.findById(req.params.id)
+         
+           return res.json({
+            msg:'oops nothing to update',
+            newPost: {
+              ...post._doc,
+              user: req.user,
+            },
+           })
+        }
       for (let i = 0; i < newimages.length; i++) {
         if (newimages[i].camera) {
           const upload = await cloudinary.v2.uploader.upload(newimages[i].camera, {
