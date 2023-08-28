@@ -125,7 +125,7 @@ const handleCapture = () => {
         return
     }
      if(status.onEdit){
-        dispatch(updatePost({content, images, auth, status}))
+        dispatch(updatePost({content, images, auth, status,videos}))
      }
      else{
 

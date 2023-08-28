@@ -53,17 +53,20 @@ export const getPost=(id,token)=>async (dispatch)=>{
     }
 }
 
-export const updatePost = ({content, images, auth, status}) => async (dispatch) => {
+export const updatePost = ({content, images, auth, status,videos}) => async (dispatch) => {
     try {
         const imgNewUrl = images.filter(img => !img.url)
         const imgOldUrl = images.filter(img => img.url)
          if(content==status.content && images.length==status.images.length && images.every((obj)=>obj.url!=undefined)){
             return
          }
+         if(content==status.content && videos.length==status.images.length && images.every((obj)=>obj.url!=undefined)){
+            return
+         }
 
         dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true} })     
       
-        const res = await putDataAPI(`post/${status._id}`,{content,images},auth.token)
+        const res = await putDataAPI(`post/${status._id}`,{content,images,videos},auth.token)
         console.log(res)
         dispatch({
             type: POST_TYPES.UPDATE_POST,

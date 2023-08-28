@@ -50,7 +50,7 @@ const postCtrl = {
         }
       }
       for(let i=0;i<videos.length;i++){
-        console.log(videos)
+       
         const upload = await cloudinary.v2.uploader.upload(videos[i], {
           folder: "posts",
           resource_type:'video'
@@ -106,14 +106,16 @@ const postCtrl = {
   },
   updatePost:async (req, res) => {
     try {
-      const { content, images } = req.body;
-    console.log(content,images)
-      if (images.length === 0)
-        return res.status(400).json({ msg: "Please add your photo." });
+      const { content, images,videos } = req.body;
+   
+      if (images.length === 0 && videos.length==0)
+        return res.status(400).json({ msg: "Please add atleast one image or video." });
         const newimages=images.filter((image)=>!image.url)
         const oldimages=images.filter((image)=>image.url)
-       
-      const uploadimage = [...oldimages];
+        const newvideos=videos.filter((video)=>!video.url)
+        const oldvideos=videos.filter((video)=>video.url)
+      const uploadimage = [...oldimages,...oldvideos];
+    
       for (let i = 0; i < newimages.length; i++) {
         if (newimages[i].camera) {
           const upload = await cloudinary.v2.uploader.upload(newimages[i].camera, {
@@ -130,11 +132,24 @@ const postCtrl = {
           uploadimage.push({
             public_id: upload.public_id,
             url: upload.secure_url,
+            type:'image'
           });
         }
       }
-      console.log({uploadimage})
-      console.log(req.params.id)
+      for (let i = 0; i < newvideos.length; i++) {
+     
+          const upload = await cloudinary.v2.uploader.upload(newvideos[i], {
+            folder: "posts",
+            resource_type:'video'
+          });
+          uploadimage.push({
+            public_id: upload.public_id,
+            url: upload.secure_url,
+            type:'video'
+          });
+        
+      }
+    
       const newPost = await postModel.findByIdAndUpdate(req.params.id,{
           content,
           images:uploadimage,
@@ -149,7 +164,7 @@ const postCtrl = {
      })
         
 
-      console.log(newPost);
+     
       res.json({
         msg: "updated Post!",
         newPost: {
@@ -212,7 +227,7 @@ getUserPosts: async (req, res) => {
 
 getPostsDicover: async (req, res) => {
   try {
-   console.log('hello')
+ 
     const features=new APIfeatures( postModel
       .find({ user: {$nin:[...req.user.following, req.user] }}).sort('-createdAt')
       .populate("user likes", "avatar username fullname followers").populate({
