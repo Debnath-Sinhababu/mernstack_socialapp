@@ -1,0 +1,1 @@
+export const BASEURL='https://melodic-palmier-4f1786.netlify.app'

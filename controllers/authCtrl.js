@@ -112,7 +112,7 @@ const authCtrl={
 }
 const createAccessToken = (newuser) => {
    
-    const token=Jwt.sign({id:newuser._id},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'1d'})
+ const token=Jwt.sign({id:newuser._id},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'1d'})
    
     return token
 }
